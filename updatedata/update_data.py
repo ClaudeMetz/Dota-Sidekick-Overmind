@@ -2,10 +2,17 @@
 
 # Updates the production database for a new patch
 def update_data():
-    pass
+    correct = "n"
+    while correct != "y":
+        patch = input("Enter the version number of the new patch: ")
+        correct = input("Is " + patch + " correct? (y/n): ")
+    print("Updating database...")
+
+    print("Done!")
+
     # Procedure step by step:
-    # (Note: this procedure will be manually kicked off for now)
-    # Info: Ask for patch name and other relevant data
+    #   (Note: this procedure will be manually kicked off for now)
+    #   Info: Ask for patch name and other relevant data
     # Setup: Setup (temporary) databases, folders through fitting handler classes/functions
     # Crawling: Crawl items, heroes and their abilities and talents
     # Manipulation: When necessary, manipulate the data further
