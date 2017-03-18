@@ -4,7 +4,7 @@
     "no_hero_crawling": 0,
     "no_ability_crawling": 0,
     "no_talent_crawling": 0,
-    "tmp_conservation": 0,
+    "tmp_conservation": 1,
     "no_deployment": 0
   },
   "languages": {
