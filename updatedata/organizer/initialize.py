@@ -1,3 +1,5 @@
+from ..database.blankdb import blank_db
+
 import os.path
 import shutil
 
@@ -17,3 +19,5 @@ def initialize(overseer):
     os.mkdir(os.path.join(tmp_path, "db"))
     for language in overseer.languages:
         os.mkdir(os.path.join(tmp_path, "db", language))
+        db_path = os.path.join(tmp_path, "db", language, "new.db")
+        blank_db(db_path)
