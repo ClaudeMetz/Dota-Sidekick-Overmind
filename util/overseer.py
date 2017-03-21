@@ -23,7 +23,7 @@ class Overseer:
     def __enter__(self):
         return self
 
-    # Saves all data anew as it could have changed during runtime
+    # Writes all data to disk as it could have changed during runtime
     def __exit__(self, exc_type, exc_val, exc_tb):
         data = {"patch_history": self.patch_history}
         with open(os.path.join(self.storage_path, "data.json"), mode="w") as data_file:
@@ -37,3 +37,7 @@ class Overseer:
                 message = "(dev-mode active)"
                 break
         return message
+
+    # Returns the last patch that was added
+    def last_patch(self):
+        return self.patch_history[-1]

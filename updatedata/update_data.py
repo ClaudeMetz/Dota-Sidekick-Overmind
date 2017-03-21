@@ -2,13 +2,15 @@ from util.overseer import Overseer
 from updatedata.organizer.initialize import initialize
 from updatedata.organizer.cleanup import cleanup
 
+import traceback
+
 
 # Updates the production database for a new patch
 def update_data():
     with Overseer() as overseer:
         try:
             print(overseer.dev_mode())
-            print("Last recorded patch: " + overseer.patch_history)
+            print("Last recorded patch: " + overseer.last_patch())
 
             correct = "n"
             while correct != "y":
@@ -26,14 +28,14 @@ def update_data():
             # Procedure step by step:
             #   (Note: this procedure will be manually kicked off for now)
             #   Info: Ask for patch name and other relevant data
-            # Setup: Setup (temporary) databases, folders through fitting handler classes/functions
+            #   Setup: Setup (temporary) databases, folders through fitting handler classes/functions
             # Crawling: Crawl items, heroes and their abilities and talents
             #           (Image detection for crawling is probably going to have to be manual)
             # Manipulation: When necessary, manipulate the data further
             # Saving & Deployment: Save the polished data to the database and deploy to production
             # Clean up: Remove tmp structures etc
-        except Exception as e:
-            print(e)
+        except Exception:
+            print(traceback.print_exc())
             if overseer.dev_settings["tmp_conservation"] == 0:
                 cleanup()
 
