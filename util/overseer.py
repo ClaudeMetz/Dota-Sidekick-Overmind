@@ -1,7 +1,6 @@
 import json
 import os.path
 
-
 # Handles settings and general data for all parts of the project
 # Data: patch_history
 # Settings: dev_settings

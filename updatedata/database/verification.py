@@ -1,6 +1,3 @@
-import inspect
-
-
 # Verifies the data entered into the classes to prevent database insertion errors
 
 # Checks if an ability or talent matches the hero class it is being attached to and adds it to the respective array

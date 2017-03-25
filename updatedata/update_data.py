@@ -24,16 +24,6 @@ def update_data():
             if overseer.dev_settings["tmp_conservation"] == 0:
                 cleanup()
             print("Database successfully updated!")
-
-            # Procedure step by step:
-            #   (Note: this procedure will be manually kicked off for now)
-            #   Info: Ask for patch name and other relevant data
-            #   Setup: Setup (temporary) databases, folders through fitting handler classes/functions
-            # Crawling: Crawl items, heroes and their abilities and talents
-            #           (Image detection for crawling is probably going to have to be manual)
-            # Manipulation: When necessary, manipulate the data further
-            # Saving & Deployment: Save the polished data to the database and deploy to production
-            # Clean up: Remove tmp structures etc
         except Exception:
             print(traceback.print_exc())
             if overseer.dev_settings["tmp_conservation"] == 0:
