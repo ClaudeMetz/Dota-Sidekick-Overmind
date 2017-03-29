@@ -1,6 +1,8 @@
 from util.overseer import Overseer
 from updatedata.organizer.initialize import initialize
 from updatedata.organizer.cleanup import cleanup
+from updatedata.organizer.cacher import Cacher
+from updatedata.crawler.items import crawl_items
 
 import traceback
 
@@ -21,13 +23,15 @@ def update_data():
             initialize(overseer)
             print("Setup complete!")
 
-            if overseer.dev_settings["tmp_conservation"] == 0:
-                cleanup()
+            cacher = Cacher(overseer)
+            crawl_items(cacher)
+            print("Crawling complete!")
+
+            cleanup(overseer)
             print("Database successfully updated!")
         except Exception:
             print(traceback.print_exc())
-            if overseer.dev_settings["tmp_conservation"] == 0:
-                cleanup()
+            cleanup(overseer)
 
 
 if __name__ == '__main__':
