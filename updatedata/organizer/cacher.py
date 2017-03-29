@@ -19,7 +19,7 @@ class Cacher:
 
     # Retrieves the requested html-file either from cache or downloads it
     def get(self, url):
-        url_simple = url.lstrip("https://www.").replace("/", "_")
+        url_simple = url.lstrip("https://").replace("/", "_")
         if self.caching_allowed(url):
             if (url_simple + ".html") in self.files:
                 with open(os.path.join(self.cache_path, url_simple + ".html"), mode="r") as data_file:

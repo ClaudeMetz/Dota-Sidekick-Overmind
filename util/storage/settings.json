@@ -5,7 +5,7 @@
   },
   "caching": {
     "overviews": 1,
-    "items": 0,
+    "items": 1,
     "heroes": 0,
     "abilities": 0
   },

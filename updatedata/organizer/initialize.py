@@ -9,7 +9,7 @@ import shutil
 def initialize(overseer):
     assetmanager.check_folder_structure()
 
-    tmp_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".tmp"))
+    tmp_path = overseer.tmp_path
     if os.path.isdir(tmp_path):
         shutil.rmtree(tmp_path)
 

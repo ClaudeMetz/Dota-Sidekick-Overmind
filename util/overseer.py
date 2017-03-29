@@ -8,11 +8,13 @@ import os.path
 class Overseer:
     # Loads all settings and data and saves it as instance variables
     def __init__(self):
+        self.tmp_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "updatedata", ".tmp"))
         self.storage_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "storage"))
 
         with open(os.path.join(self.storage_path, "data.json"), mode="r") as data_file:
             data = json.loads(data_file.read())
         self.patch_history = data["patch_history"]
+        self.lang_shorthand = data["lang_shorthand"]
 
         with open(os.path.join(self.storage_path, "settings.json"), mode="r") as settings_file:
             settings = json.loads(settings_file.read())
@@ -38,7 +40,7 @@ class Overseer:
 
     # Writes all data to disk as it could have changed during runtime
     def __exit__(self, exc_type, exc_val, exc_tb):
-        data = {"patch_history": self.patch_history}
+        data = {"patch_history": self.patch_history, "lang_shorthand": self.lang_shorthand}
         with open(os.path.join(self.storage_path, "data.json"), mode="w") as data_file:
             data_file.write(json.dumps(data, indent=4))
 

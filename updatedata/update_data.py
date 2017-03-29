@@ -2,7 +2,7 @@ from util.overseer import Overseer
 from updatedata.organizer.initialize import initialize
 from updatedata.organizer.cleanup import cleanup
 from updatedata.organizer.cacher import Cacher
-from updatedata.crawler.items import crawl_items
+from updatedata.database.populate import populate
 
 import traceback
 
@@ -14,7 +14,7 @@ def update_data():
             print(overseer.dev_mode())
             print("Last recorded patch: " + overseer.last_patch())
 
-            correct = "n"
+            correct = "y"
             while correct != "y":
                 patch = input("Enter the version number of the new patch: ")
                 correct = input("Is '" + patch + "' correct? (y/n): ")
@@ -24,8 +24,9 @@ def update_data():
             print("Setup complete!")
 
             cacher = Cacher(overseer)
-            crawl_items(cacher)
+            populate(overseer, cacher)
             print("Crawling complete!")
+
 
             cleanup(overseer)
             print("Database successfully updated!")

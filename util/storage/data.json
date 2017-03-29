@@ -2,5 +2,9 @@
     "patch_history": [
         "7.00",
         "7.01"
-    ]
+    ],
+    "lang_shorthand": {
+        "english": "www",
+        "german": "de"
+    }
 }
