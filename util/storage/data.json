@@ -4,7 +4,21 @@
         "7.01"
     ],
     "lang_shorthand": {
+        "bulgarian": "bg",
+        "czech": "cs",
+        "german": "de",
         "english": "www",
-        "german": "de"
+        "spanish": "es",
+        "french": "fr",
+        "italian": "it",
+        "georgian": "ka",
+        "korean": "ko",
+        "polish": "pl",
+        "portuguese": "pt",
+        "russian": "ru",
+        "serbian": "sr",
+        "turkish": "tr",
+        "ukrainian": "uk",
+        "chinese": "zh"
     }
 }

@@ -1,0 +1,10 @@
+Records all data bugs in Dotabuff:
+
+- Shadow Amulet no quality span in name div
+- Battle Fury passive: cleave text error
+- Abyssal Blade active: text errror
+- Helm of the dominator: notes text wrong as no upgrade is possible anymore (dota2.com error)
+- Notes texts in general are lacking
+
+
+Research shop info stuff, it's probably missing stuff

@@ -20,5 +20,5 @@ class Item(ExtendedBase):
     # Returns name and value of all fields required by the database
     def get_required(self):
         required = super(Item, self).get_required()
-        required.update({"recipe": self.recipe, "quality": self.quality})
+        required.update({"quality": self.quality})
         return required

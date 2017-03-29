@@ -14,7 +14,8 @@ def update_data():
             print(overseer.dev_mode())
             print("Last recorded patch: " + overseer.last_patch())
 
-            correct = "y"
+            correct = "y"  # For dev purposes
+            patch = "7.04"  # ^
             while correct != "y":
                 patch = input("Enter the version number of the new patch: ")
                 correct = input("Is '" + patch + "' correct? (y/n): ")
@@ -24,11 +25,11 @@ def update_data():
             print("Setup complete!")
 
             cacher = Cacher(overseer)
-            populate(overseer, cacher)
+            populate(overseer, cacher, patch)
             print("Crawling complete!")
 
-
             cleanup(overseer)
+            # overseer.patch_history.append(patch)
             print("Database successfully updated!")
         except Exception:
             print(traceback.print_exc())
