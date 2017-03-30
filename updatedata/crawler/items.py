@@ -4,25 +4,13 @@ from .base import BaseCrawler
 from bs4 import BeautifulSoup, SoupStrainer
 
 
-# Handles crawling of dotabuff.com for the given language
+# Handles crawling of dotabuff.com's items for the given language
 class ItemCrawler(BaseCrawler):
     # Main crawling procedure
-    def crawl(self):
-        item_list = self.list_items()
+    def crawl(self, item_list):
         for item_name in item_list:
             item = self.crawl_item(item_name)
             self.handler.insert(item)
-
-    # Returns a list with the names of all available items
-    def list_items(self):
-        html = self.cacher.get("https://" + self.lang_shorthand + ".dotabuff.com/items")
-        soup = BeautifulSoup(html, "lxml")
-
-        raw_list = soup.find_all(class_="cell-xlarge")
-        clean_list = []
-        for item in raw_list:
-            clean_list.append(str(item.a["href"][7:]))
-        return clean_list
 
     # Crawls the given item and returns it as an object
     def crawl_item(self, name):
