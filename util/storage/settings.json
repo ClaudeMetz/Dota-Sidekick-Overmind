@@ -6,8 +6,8 @@
   "caching": {
     "overviews": 1,
     "items": 1,
-    "heroes": 0,
-    "abilities": 0
+    "heroes": 1,
+    "abilities": 1
   },
   "languages": {
     "english": 1
