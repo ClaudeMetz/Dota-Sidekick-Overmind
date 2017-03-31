@@ -58,5 +58,6 @@ class Handler:
             sql_talent = "INSERT INTO talents VALUES (:hero, :level, :left_talent, :right_talent, :patch, :revision)"
             for talent in obj.talents:
                 data_talent = ({"hero": talent.hero, "level": talent.level, "left_talent": talent.left_talent,
-                                "right_talent": talent.right_talent, "patch": talent.pach, "revision": talent.revision})
+                                "right_talent": talent.right_talent, "patch": talent.patch,
+                                "revision": talent.revision})
                 self.cursor.execute(sql_talent, data_talent)
