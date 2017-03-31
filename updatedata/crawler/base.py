@@ -1,8 +1,7 @@
 
 
 class BaseCrawler:
-    def __init__(self, handler, cacher, lang_shorthand, patch):
+    def __init__(self, handler, cacher, patch):
         self.handler = handler
         self.cacher = cacher
-        self.lang_shorthand = lang_shorthand
         self.patch = patch

@@ -1,7 +1,6 @@
 from util.overseer import Overseer
 from updatedata.organizer.initialize import initialize
 from updatedata.organizer.cleanup import cleanup
-from updatedata.organizer.cacher import Cacher
 from updatedata.database.populate import populate
 
 import traceback
@@ -14,18 +13,18 @@ def update_data():
             print(overseer.dev_mode())
             print("Last recorded patch: " + overseer.last_patch())
 
-            correct = "y"  # For dev purposes
-            patch = "7.04"  # ^
-            while correct != "y":
-                patch = input("Enter the version number of the new patch: ")
-                correct = input("Is '" + patch + "' correct? (y/n): ")
+            patch = "dev"
+            if overseer.dev_settings["skip_intro_questions"] == 0:
+                correct = "n"
+                while correct != "y":
+                    patch = input("Enter the version number of the new patch: ")
+                    correct = input("Is '" + patch + "' correct? (y/n): ")
             print("Updating database...")
 
             initialize(overseer)
             print("Setup complete!")
 
-            cacher = Cacher(overseer)
-            populate(overseer, cacher, patch)
+            populate(overseer, patch)
             print("Crawling complete!")
 
             cleanup(overseer)

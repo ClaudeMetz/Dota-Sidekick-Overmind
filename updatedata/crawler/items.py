@@ -14,7 +14,7 @@ class ItemCrawler(BaseCrawler):
 
     # Crawls the given item and returns it as an object
     def crawl_item(self, name):
-        html = self.cacher.get("https://" + self.lang_shorthand + ".dotabuff.com/items/" + name)
+        html = self.cacher.get("dotabuff.com/items/" + name)
         strainer = SoupStrainer(class_="item-tooltip")
         soup = BeautifulSoup(html, "lxml", parse_only=strainer)
         item = Item()

@@ -1,6 +1,8 @@
 {
   "dev_settings": {
-    "tmp_conservation": 1,
+    "conserve_tmp": 1,
+    "conserve_cache": 1,
+    "skip_intro_questions": 1,
     "no_deployment": 0
   },
   "caching": {

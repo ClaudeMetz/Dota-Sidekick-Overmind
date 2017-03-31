@@ -16,9 +16,7 @@ class HeroCrawler(BaseCrawler):
             hero.image = None  # Needs to be sorted out
             self.crawl_main_page(hero)
 
-            html = self.cacher.get(
-                "https://" + self.lang_shorthand + ".dotabuff.com/heroes/" + hero.name + "/abilities"
-            )
+            html = self.cacher.get("dotabuff.com/heroes/" + hero.name + "/abilities")
             strainer = SoupStrainer(class_="content-inner")
             ability_soup = BeautifulSoup(html, "lxml", parse_only=strainer)
 
@@ -30,7 +28,7 @@ class HeroCrawler(BaseCrawler):
 
     # Crawls the main hero page on dotabuff.com for dname, type and roles
     def crawl_main_page(self, hero):
-        html = self.cacher.get("https://" + self.lang_shorthand + ".dotabuff.com/heroes/" + hero.name)
+        html = self.cacher.get("dotabuff.com/heroes/" + hero.name)
         soup = BeautifulSoup(html, "lxml")
 
         sub_soup = soup.find(class_="header-content-title").h1.contents

@@ -1,4 +1,5 @@
 from .handler import Handler
+from ..organizer.cacher import Cacher
 from ..crawler.items import ItemCrawler
 from ..crawler.heroes import HeroCrawler
 
@@ -7,19 +8,22 @@ from bs4 import BeautifulSoup
 
 
 # Populates the databases for all languages
-def populate(overseer, cacher, patch):
+def populate(overseer, patch):
+    cacher = Cacher(overseer, "english")
+    item_list = list_items(cacher)
+    hero_list = list_heroes(cacher)
     for language in overseer.languages:
         db_path = os.path.join(overseer.tmp_path, "db", language, "new.db")
+        if language != "english":  # So the www-cacher doesn't initialize twice
+            cacher = Cacher(overseer, language)
         with Handler(db_path) as handler:
-            #item_list = list_items(cacher)
-            #ItemCrawler(handler, cacher, overseer.lang_shorthand[language], patch).crawl(item_list)
-            hero_list = list_heroes(cacher)
-            HeroCrawler(handler, cacher, overseer.lang_shorthand[language], patch).crawl(hero_list)
+            #ItemCrawler(handler, cacher, patch).crawl(item_list)
+            HeroCrawler(handler, cacher, patch).crawl(hero_list)
 
 
 # Returns a list with the names of all available items
 def list_items(cacher):
-    html = cacher.get("https://www.dotabuff.com/items")
+    html = cacher.get("dotabuff.com/items")
     soup = BeautifulSoup(html, "lxml")
 
     raw_list = soup.find_all(class_="cell-xlarge")
@@ -31,7 +35,7 @@ def list_items(cacher):
 
 # Returns a list with the names of all available heroes
 def list_heroes(cacher):
-    html = cacher.get("https://www.dotabuff.com/heroes")
+    html = cacher.get("dotabuff.com/heroes")
     soup = BeautifulSoup(html, "lxml")
 
     div = soup.find(class_="hero-grid")
