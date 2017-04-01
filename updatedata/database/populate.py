@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 
 # Populates the databases for all languages
-def populate(overseer, patch):
+def populate(overseer, patch, revision):
     cacher = Cacher(overseer, "english")
     item_list = list_items(cacher)
     hero_list = list_heroes(cacher)
@@ -17,8 +17,8 @@ def populate(overseer, patch):
         if language != "english":  # So the www-cacher doesn't initialize twice
             cacher = Cacher(overseer, language)
         with Handler(db_path) as handler:
-            ItemCrawler(handler, cacher, patch).crawl(item_list)
-            HeroCrawler(handler, cacher, patch).crawl(hero_list)
+            ItemCrawler(handler, cacher, patch, revision).crawl(item_list)
+            HeroCrawler(handler, cacher, patch, revision).crawl(hero_list)
 
 
 # Returns a list with the names of all available items
@@ -29,7 +29,7 @@ def list_items(cacher):
     raw_list = soup.find_all(class_="cell-xlarge")
     clean_list = []
     for item in raw_list:
-        clean_list.append(str(item.a["href"][7:]))
+        clean_list.append(item.a["href"][7:])
     return clean_list
 
 
@@ -42,5 +42,5 @@ def list_heroes(cacher):
     raw_list = div.find_all("a")
     clean_list = []
     for item in raw_list:
-        clean_list.append(str(item["href"][8:]))
+        clean_list.append(item["href"][8:])
     return clean_list

@@ -15,8 +15,8 @@ class HeroCrawler(BaseCrawler):
             hero = Hero()
             hero.name = hero_name
             hero.patch = self.patch
-            hero.revision = 0  # Needs to be sorted out
-            hero.image = None  # Needs to be sorted out
+            hero.revision = self.revision
+            hero.image = None  # Inserted manually (for now)
             self.crawl_main_page(hero)
 
             html = self.cacher.get("dotabuff.com/heroes/" + hero.name + "/abilities")

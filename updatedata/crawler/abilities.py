@@ -15,11 +15,11 @@ def crawl_abilities(ability_soup, hero):
         spot += 1
 
         header = raw_ability.header
-        ability.dname = str(header.contents[0])
-        ability.hotkey = hotkey(header)
-
-        ability.name = ability.dname.lower().replace("\'", "").replace(":", "").replace(".", "").replace(" ", "-")
+        dname = header.contents[0].replace("\\", "")
+        ability.dname = dname
+        ability.name = format_name(dname)
         # Kind of hack-y for now, could be replaced with actual crawling
+        ability.hotkey = hotkey(header)
 
         body = raw_ability.article.div.div
 
@@ -28,15 +28,26 @@ def crawl_abilities(ability_soup, hero):
         ability.damage_type = effects(body, "damage_type")
         ability.pierces_SI = effects(body, "spell_immunity_type")
 
-        ability.description = de_ag_no(body, "description")
+        ability.description = de_no_st(body, "description", "p")
         ability.aghs_description = aghs(body)
-        ability.notes = de_ag_no(body, "notes")
-        ability.stats = stats(body)
+        ability.notes = de_no_st(body, "notes", "p")
+        ability.stats = de_no_st(body, "stats", "div")
 
         ability.cooldown = cd_mc(body, "cooldown")
         ability.manacost = cd_mc(body, "manacost")
 
         hero.append(ability)
+
+
+# Formats long strings correctly
+def parse_strings(string):
+    string = " ".join(string.replace("\\", "").split())
+    return string
+
+
+# Transforms a 'dname' into a 'name'
+def format_name(dname):
+    return dname.lower().replace("\\", "").replace("\'", "").replace(":", "").replace(".", "").replace(" ", "-")
 
 
 def hotkey(header):
@@ -54,13 +65,13 @@ def effects(soup, name):
         return None
 
 
-# description and notes
-def de_ag_no(soup, name):
+# description, notes and stats
+def de_no_st(soup, name, tag):
     sub_soup = soup.find(class_=name)
     if sub_soup:
         tags = []
-        for element in sub_soup.children:
-            tags.append(str(element.text).replace("\\", ""))
+        for element in sub_soup.find_all(tag):
+            tags.append(parse_strings(element.text))
         return "|".join(tags)
     else:
         return None
@@ -70,18 +81,7 @@ def de_ag_no(soup, name):
 def aghs(soup):
     sub_soup = soup.find(class_="aghanim_description")
     if sub_soup:
-        return str(sub_soup.text)
-    else:
-        return None
-
-
-def stats(soup):
-    sub_soup = soup.find(class_="stats")
-    if sub_soup:
-        tags = []
-        for element in sub_soup.children:
-            tags.append(str(element.text).replace("\\", ""))
-        return "|".join(tags)
+        return parse_strings(sub_soup.text)
     else:
         return None
 

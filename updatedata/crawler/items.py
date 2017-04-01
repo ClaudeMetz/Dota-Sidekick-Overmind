@@ -20,19 +20,19 @@ class ItemCrawler(BaseCrawler):
         item = Item()
 
         item.patch = self.patch
-        item.revision = 0  # Needs to be sorted out
+        item.revision = self.revision
 
         item.name = name
         item.dname = str(soup.find(class_="avatar").div.img["title"])
-        item.lore = str(soup.find(class_="lore").string).replace("\\", "")
-        item.image = None  # Needs to be sorted out
+        item.lore = parse_strings(soup.find(class_="lore").string)
+        item.image = None  # Inserted manually (for now)
 
         item.recipe = recipe(soup)
         item.quality = quality(soup, name)
         item.price = price(soup)
-        item.description = de_no_st(soup, "description")
-        item.notes = de_no_st(soup, "notes")
-        item.stats = de_no_st(soup, "stats")
+        item.description = de_no_st(soup, "description", "p")
+        item.notes = de_no_st(soup, "notes", "p")
+        item.stats = de_no_st(soup, "stats", "div")
         item.cooldown = cooldown(soup)
         item.manacost = manacost(soup)
         item.components = components(soup)
@@ -40,6 +40,12 @@ class ItemCrawler(BaseCrawler):
         item.shop_info = shop(soup)
 
         return item
+
+
+# Formats long strings correctly
+def parse_strings(string):
+    string = " ".join(string.replace("\\", "").split())
+    return string
 
 
 def recipe(soup):
@@ -57,7 +63,7 @@ def quality(soup, name):
     if name == "shadow-amulet":
         return "component"
     else:
-        return str(soup.find(class_="name").span["class"][0][8:])
+        return soup.find(class_="name").span["class"][0][8:]
 
 
 def price(soup):
@@ -70,12 +76,12 @@ def price(soup):
 
 
 # description, notes and stats
-def de_no_st(soup, s):
-    sub_soup = soup.find(class_=s)
+def de_no_st(soup, name, tag):
+    sub_soup = soup.find(class_=name)
     if sub_soup:
         tags = []
-        for element in sub_soup.children:
-            tags.append(str(element.text).replace("\\", ""))
+        for element in sub_soup.find_all(tag):
+            tags.append(parse_strings(element.text))
         return "|".join(tags)
     else:
         return None
@@ -107,7 +113,7 @@ def component_in(soup):
         items = sub_soup.find_all(class_="icon")
         tags = []
         for item in items:
-            tags.append(str(item.div.a["href"][7:]))
+            tags.append(item.div.a["href"][7:])
         return "|".join(tags)
     else:
         return None
@@ -119,7 +125,7 @@ def components(soup):
         items = sub_soup.find_all(class_="icon")
         tags = []
         for item in items:
-            name = str(item.div.a["href"][7:])
+            name = item.div.a["href"][7:]
             if not name.startswith("recipe"):
                 tags.append(name)
         return "|".join(tags)
