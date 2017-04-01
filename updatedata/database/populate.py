@@ -17,7 +17,7 @@ def populate(overseer, patch):
         if language != "english":  # So the www-cacher doesn't initialize twice
             cacher = Cacher(overseer, language)
         with Handler(db_path) as handler:
-            #ItemCrawler(handler, cacher, patch).crawl(item_list)
+            ItemCrawler(handler, cacher, patch).crawl(item_list)
             HeroCrawler(handler, cacher, patch).crawl(hero_list)
 
 

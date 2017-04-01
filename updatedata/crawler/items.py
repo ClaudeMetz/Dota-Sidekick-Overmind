@@ -69,7 +69,7 @@ def price(soup):
         return None
 
 
-# Description, Notes and Stats
+# description, notes and stats
 def de_no_st(soup, s):
     sub_soup = soup.find(class_=s)
     if sub_soup:

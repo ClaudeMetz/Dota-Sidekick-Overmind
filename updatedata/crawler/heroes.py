@@ -1,6 +1,7 @@
 from ..classes.hero import Hero
 from .base import BaseCrawler
 from .attributes import crawl_attributes
+from .abilities import crawl_abilities
 from .talents import crawl_talents
 
 from bs4 import BeautifulSoup, SoupStrainer
@@ -23,10 +24,11 @@ class HeroCrawler(BaseCrawler):
             ability_soup = BeautifulSoup(html, "lxml", parse_only=strainer)
 
             crawl_attributes(ability_soup, hero)
+            crawl_abilities(ability_soup, hero)
             crawl_talents(ability_soup, hero)
 
             # The following is still missing, could be acquired by crawling dota2.com:
-            # attack_range, lore, missile_speed
+            # hero.attack_range, hero.lore, hero.missile_speed, ability.lore
             self.handler.insert(hero)
 
     # Crawls the main hero page on dotabuff.com for dname, type and roles
