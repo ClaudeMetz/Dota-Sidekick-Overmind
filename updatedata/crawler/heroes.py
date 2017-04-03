@@ -1,4 +1,4 @@
-from ..classes.hero import Hero
+from ..modules.hero import Hero
 from .base import BaseCrawler
 from .attributes import crawl_attributes
 from .abilities import crawl_abilities
@@ -29,7 +29,11 @@ class HeroCrawler(BaseCrawler):
 
             # The following is still missing, could be acquired by crawling dota2.com:
             # hero.attack_range, hero.lore, hero.missile_speed, ability.lore
-            self.handler.insert(hero)
+
+            self.session.add(hero)
+            appendages = hero.ability_list + hero.talent_list
+            for appendage in appendages:
+                self.session.add(appendage)
 
     # Crawls the main hero page on dotabuff.com for dname, type and roles
     def crawl_main_page(self, hero):

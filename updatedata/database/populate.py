@@ -1,9 +1,8 @@
-from .handler import Handler
 from ..organizer.cacher import Cacher
 from ..crawler.items import ItemCrawler
 from ..crawler.heroes import HeroCrawler
+from ..database.session_scope import session_scope
 
-import os.path
 from bs4 import BeautifulSoup
 
 
@@ -13,12 +12,11 @@ def populate(overseer, patch, revision):
     item_list = list_items(cacher)
     hero_list = list_heroes(cacher)
     for language in overseer.languages:
-        db_path = os.path.join(overseer.tmp_path, "db", language, "new.sqlite")
         if language != "english":  # So the www-cacher doesn't initialize twice
             cacher = Cacher(overseer, language)
-        with Handler(db_path) as handler:
-            ItemCrawler(handler, cacher, patch, revision).crawl(item_list)
-            HeroCrawler(handler, cacher, patch, revision).crawl(hero_list)
+        with session_scope(language, "new") as session:
+            ItemCrawler(session, cacher, patch, revision).crawl(item_list)
+            HeroCrawler(session, cacher, patch, revision).crawl(hero_list)
 
 
 # Returns a list with the names of all available items

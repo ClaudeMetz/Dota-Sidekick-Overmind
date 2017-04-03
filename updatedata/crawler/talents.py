@@ -1,4 +1,4 @@
-from ..classes.talent import Talent
+from ..modules.talent import Talent
 
 
 # Crawls the ability hero page on dotabuff.com for talents
@@ -15,4 +15,4 @@ def crawl_talents(ability_soup, hero):
         talent.level = int(contents[1].text)
         talent.right_talent = contents[2].text
 
-        hero.append(talent)
+        hero.talent_list.append(talent)

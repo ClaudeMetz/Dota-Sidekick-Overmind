@@ -1,4 +1,3 @@
-from ..database.blankdb import blank_db
 from util import assetmanager
 
 import os.path
@@ -20,12 +19,8 @@ def initialize(overseer):
     for language in overseer.languages:
         language_path = os.path.join(db_path, language)
         os.mkdir(language_path)
-        new_path = os.path.join(language_path, "new.sqlite")
-        blank_db(new_path)
 
         src = assetmanager.find_db(language)
-        dst = os.path.join(language_path, "old.sqlite")
-        if not src:
-            blank_db(dst)
-        else:
+        dst = os.path.join(language_path, "old.db")
+        if src:
             shutil.copyfile(src, dst)
