@@ -10,6 +10,7 @@ def crawl_abilities(ability_soup, hero):
         ability.hero = hero.name
         ability.patch = hero.patch
         ability.revision = hero.revision
+        ability.image = None
 
         ability.spot = spot
         spot += 1

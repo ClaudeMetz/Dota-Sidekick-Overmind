@@ -25,7 +25,7 @@ class ItemCrawler(BaseCrawler):
         item.name = name
         item.dname = str(soup.find(class_="avatar").div.img["title"])
         item.lore = parse_strings(soup.find(class_="lore").string)
-        item.image = None  # Inserted manually (for now)
+        item.image = None
 
         item.recipe = recipe(soup)
         item.quality = quality(soup, name)

@@ -9,11 +9,6 @@ def check_folder_structure():
     folders = ([
         ["asset"],
         ["asset", "live"],
-        ["asset", "live", "img"],
-        ["asset", "live", "img", "heroes"],
-        ["asset", "live", "img", "items"],
-        ["asset", "live", "img", "abilities"],
-        ["asset", "live", "img", "other"],
         ["asset", "live", "db"],
         ["asset", "stashed"],
         ["asset", "stashed", "db"]

@@ -13,7 +13,7 @@ def populate(overseer, patch, revision):
     item_list = list_items(cacher)
     hero_list = list_heroes(cacher)
     for language in overseer.languages:
-        db_path = os.path.join(overseer.tmp_path, "db", language, "new.db")
+        db_path = os.path.join(overseer.tmp_path, "db", language, "new.sqlite")
         if language != "english":  # So the www-cacher doesn't initialize twice
             cacher = Cacher(overseer, language)
         with Handler(db_path) as handler:
