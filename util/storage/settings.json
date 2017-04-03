@@ -4,7 +4,7 @@
     "conserve_cache": 1,
     "skip_intro_questions": 1,
     "no_patch_appending": 1,
-    "no_deployment": 0
+    "no_deployment": 1
   },
   "caching": {
     "overviews": 1,

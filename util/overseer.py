@@ -8,8 +8,10 @@ import os.path
 class Overseer:
     # Loads all settings and data and saves it as instance variables
     def __init__(self):
-        self.tmp_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "updatedata", ".tmp"))
-        self.storage_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "storage"))
+        this_path = os.path.abspath(os.path.dirname(__file__))
+        self.asset_path = os.path.join(this_path, "..", "asset")
+        self.tmp_path = os.path.join(this_path, "..", "updatedata", ".tmp")
+        self.storage_path = os.path.join(this_path, "storage")
 
         with open(os.path.join(self.storage_path, "data.json"), mode="r") as data_file:
             data = json.loads(data_file.read())

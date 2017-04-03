@@ -1,6 +1,7 @@
 from util.overseer import Overseer
 from updatedata.organizer.initialize import initialize
 from updatedata.organizer.cleanup import cleanup
+from updatedata.organizer.deploy import deploy
 from updatedata.database.populate import populate
 
 import traceback
@@ -33,9 +34,12 @@ def update_data():
             populate(overseer, patch, revision)
             print("Crawling complete!")
 
-            cleanup(overseer)
+            deploy(overseer)
+            print("Deployment complete!")
+
             if overseer.dev_settings["no_patch_appending"] == 0:
                 overseer.patch_history.append(patch)
+            cleanup(overseer)
             print("Database successfully updated!")
         except Exception:
             print(traceback.print_exc())

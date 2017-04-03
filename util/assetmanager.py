@@ -1,4 +1,5 @@
-import os.path
+import os
+import shutil
 
 # Manages the asset folder
 
@@ -33,3 +34,14 @@ def find_db(language):
         full_path = os.path.join(asset_path, *path)
         if os.path.isfile(full_path):
             return full_path
+
+
+# Deploys the database from the given path to the specified asset folder
+def deploy_db(src, overseer):
+    language = src.split(os.sep)[-2]
+    if overseer.languages[language] == 1:
+        folder = "live"
+    else:
+        folder = "stashed"
+    dst = os.path.join(overseer.asset_path, folder, "db", language + ".db")
+    shutil.copyfile(src, dst)

@@ -1,4 +1,5 @@
 from util import assetmanager
+from ..database.session_scope import session_scope
 
 import os.path
 import shutil
@@ -24,3 +25,6 @@ def initialize(overseer):
         dst = os.path.join(language_path, "old.db")
         if src:
             shutil.copyfile(src, dst)
+        else:
+            with session_scope(language, "old"):
+                pass
