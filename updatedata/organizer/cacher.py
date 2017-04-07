@@ -2,6 +2,7 @@ import os.path
 import urllib.request
 import shutil
 import re
+import time
 
 
 # Handles downloading and caching of html-files
@@ -10,6 +11,9 @@ class Cacher:
         self.overseer = overseer
         self.lang = overseer.lang_shorthand[language]
         self.cache_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".cache"))
+
+        self.last_request = time.time()
+        self.rate_limiting = abs(self.overseer.dev_settings["no_rate_limiting"] - 1)
 
         if self.overseer.dev_settings["conserve_cache"] == 0:
             if os.path.isdir(self.cache_path):
@@ -58,6 +62,13 @@ class Cacher:
 
     # Retrieves the file specified by the url and returns it
     def request_url(self, url):
+        if self.rate_limiting == 1:
+            now = time.time()
+            difference = now - self.last_request
+            if difference < 1:
+                time.sleep(difference)
+            self.last_request = now
+        print("request")
         req = urllib.request.Request("https://" + self.lang + "." + url, headers={"User-Agent": "Mozilla/5.0"})
         html = urllib.request.urlopen(req).read()
         return html

@@ -1,4 +1,4 @@
-# (originally, I wanted to do this with bakedQueries, but it turns out that is not so simple in this case)
+# (originally, I wanted to do this with Baked Queries, but it turns out that is not so simple in this case)
 
 
 # Checks and returns whether the given object has changed in relation to the most recent entry of that object
