@@ -11,8 +11,8 @@ Base = declarative_base()
 
 
 @contextmanager
-def session_scope(language, db_name):
-    db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".tmp", "db", language, db_name + ".db"))
+def session_scope(language):
+    db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".tmp", "db", language, "tmp.db"))
     engine = create_engine("sqlite:///" + db_path)
     Base.metadata.create_all(engine)
 

@@ -32,7 +32,7 @@ def update_data():
             print("Setup complete!")
 
             populate(overseer, patch, revision)
-            print("Crawling complete!")
+            print("Crawling & Populating complete!")
 
             deploy(overseer)
             print("Deployment complete!")

@@ -1,4 +1,4 @@
-from ..modules.item import Item
+from ..models.item import Item
 from .base import BaseCrawler
 
 from bs4 import BeautifulSoup, SoupStrainer
@@ -10,7 +10,7 @@ class ItemCrawler(BaseCrawler):
     def crawl(self, item_list):
         for item_name in item_list:
             item = self.crawl_item(item_name)
-            self.session.add(item)
+            yield item
 
     # Crawls the given item and returns it as an object
     def crawl_item(self, name):

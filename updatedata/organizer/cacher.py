@@ -54,12 +54,10 @@ class Cacher:
                 self.overseer.caching["heroes"] and re.fullmatch(".*/heroes/[a-z\-]*", url) or
                 self.overseer.caching["abilities"] and re.fullmatch(".*/heroes/.*/abilities", url)
            ):
-            print("Caching: " + url)  # For debug purposes
             return True
 
     # Retrieves the file specified by the url and returns it
     def request_url(self, url):
         req = urllib.request.Request("https://" + self.lang + "." + url, headers={"User-Agent": "Mozilla/5.0"})
         html = urllib.request.urlopen(req).read()
-        print("Requesting: " + url)  # For debug purposes
         return html

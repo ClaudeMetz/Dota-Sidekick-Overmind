@@ -1,9 +1,9 @@
+from .detect_change import detect_change
 from ..organizer.cacher import Cacher
 from ..crawler.items import ItemCrawler
 from ..crawler.heroes import HeroCrawler
+from ..crawler.overviews import list_items, list_heroes
 from ..database.session_scope import session_scope
-
-from bs4 import BeautifulSoup
 
 
 # Populates the databases for all languages
@@ -11,34 +11,24 @@ def populate(overseer, patch, revision):
     cacher = Cacher(overseer, "english")
     item_list = list_items(cacher)
     hero_list = list_heroes(cacher)
+
     for language in overseer.languages:
         if language != "english":  # So the www-cacher doesn't initialize twice
             cacher = Cacher(overseer, language)
-        with session_scope(language, "new") as session:
-            ItemCrawler(session, cacher, patch, revision).crawl(item_list)
-            HeroCrawler(session, cacher, patch, revision).crawl(hero_list)
 
+        with session_scope(language) as session:
+            item_generator = ItemCrawler(cacher, patch, revision).crawl(item_list)
+            for item in item_generator:
+                if detect_change(session, item):
+                    session.add(item)
+            print("Items complete!")
 
-# Returns a list with the names of all available items
-def list_items(cacher):
-    html = cacher.get("dotabuff.com/items")
-    soup = BeautifulSoup(html, "lxml")
-
-    raw_list = soup.find_all(class_="cell-xlarge")
-    clean_list = []
-    for item in raw_list:
-        clean_list.append(item.a["href"][7:])
-    return clean_list
-
-
-# Returns a list with the names of all available heroes
-def list_heroes(cacher):
-    html = cacher.get("dotabuff.com/heroes")
-    soup = BeautifulSoup(html, "lxml")
-
-    div = soup.find(class_="hero-grid")
-    raw_list = div.find_all("a")
-    clean_list = []
-    for item in raw_list:
-        clean_list.append(item["href"][8:])
-    return clean_list
+            hero_generator = HeroCrawler(cacher, patch, revision).crawl(hero_list)
+            for hero in hero_generator:
+                if detect_change(session, hero):
+                    session.add(hero)
+                appendages = hero.abilities + hero.talents
+                for appendage in appendages:
+                    if detect_change(session, appendage):
+                        session.add(appendage)
+            print("Heroes complete!")

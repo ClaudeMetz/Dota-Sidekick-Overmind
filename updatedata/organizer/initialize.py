@@ -22,9 +22,6 @@ def initialize(overseer):
         os.mkdir(language_path)
 
         src = assetmanager.find_db(language)
-        dst = os.path.join(language_path, "old.db")
+        dst = os.path.join(language_path, "tmp.db")
         if src:
             shutil.copyfile(src, dst)
-        else:
-            with session_scope(language, "old"):
-                pass

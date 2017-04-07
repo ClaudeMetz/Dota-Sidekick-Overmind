@@ -1,4 +1,4 @@
-from ..modules.ability import Ability
+from ..models.ability import Ability
 
 
 # Crawls the ability hero page on dotabuff.com for abilities
@@ -37,7 +37,7 @@ def crawl_abilities(ability_soup, hero):
         ability.cooldown = cd_mc(body, "cooldown")
         ability.manacost = cd_mc(body, "manacost")
 
-        hero.ability_list.append(ability)
+        hero.abilities.append(ability)
 
 
 # Formats long strings correctly

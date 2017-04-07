@@ -1,8 +1,7 @@
 
 
 class BaseCrawler:
-    def __init__(self, session, cacher, patch, revision):
-        self.session = session
+    def __init__(self, cacher, patch, revision):
         self.cacher = cacher
         self.patch = patch
         self.revision = revision

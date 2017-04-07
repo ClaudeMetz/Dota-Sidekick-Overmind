@@ -36,6 +36,3 @@ class Hero(Base):
 
     abilities = relationship("Ability")
     talents = relationship("Talent")
-
-    ability_list = []
-    talent_list = []
