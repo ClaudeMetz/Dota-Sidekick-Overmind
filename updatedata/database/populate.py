@@ -13,6 +13,7 @@ def populate(overseer, patch, revision):
     hero_list = list_heroes(cacher)
 
     for language in overseer.languages:
+        print("Populating for " + language + " ...")
         if language != "english":  # So the www-cacher doesn't initialize twice
             cacher = Cacher(overseer, language)
 

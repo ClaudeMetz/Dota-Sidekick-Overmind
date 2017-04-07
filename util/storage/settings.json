@@ -1,8 +1,8 @@
 {
   "dev_settings": {
-    "conserve_tmp": 1,
+    "conserve_tmp": 0,
     "conserve_cache": 1,
-    "skip_intro_questions": 1,
+    "skip_intro_questions": 0,
     "no_patch_appending": 1,
     "no_deployment": 0
   },
@@ -13,6 +13,7 @@
     "abilities": 1
   },
   "languages": {
-    "english": 1
+    "english": 1,
+    "german": 0
   }
 }
