@@ -18,8 +18,7 @@ def crawl_abilities(ability_soup, hero):
         header = raw_ability.header
         dname = header.contents[0].replace("\\", "")
         ability.dname = dname
-        ability.name = format_name(dname)
-        # Kind of hack-y for now, could be replaced with actual crawling
+        ability.name = format_name(dname)  # Kind of hack-y for now, could be replaced with actual crawling
         ability.hotkey = hotkey(header)
 
         body = raw_ability.article.div.div

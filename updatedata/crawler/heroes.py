@@ -17,6 +17,7 @@ class HeroCrawler(BaseCrawler):
             hero.patch = self.patch
             hero.revision = self.revision
             hero.image = None
+
             self.crawl_main_page(hero)
 
             html = self.cacher.get("dotabuff.com/heroes/" + hero.name + "/abilities")
