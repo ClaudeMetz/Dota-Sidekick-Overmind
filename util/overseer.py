@@ -13,8 +13,8 @@ class Overseer:
         self.storage_path = os.path.join(this_path, "storage")
 
         with open(os.path.join(self.storage_path, "data.json"), mode="r") as data_file:
-            data = json.loads(data_file.read())
-        self.version_history = OrderedDict(data["version_history"])
+            data = json.loads(data_file.read(), object_pairs_hook=OrderedDict)
+        self.version_history = data["version_history"]
         self.lang_shorthand = data["lang_shorthand"]
 
         with open(os.path.join(self.storage_path, "settings.json"), mode="r") as settings_file:
@@ -41,34 +41,42 @@ class Overseer:
 
     # Writes all data to disk as it could have changed during runtime
     def __exit__(self, exc_type, exc_val, exc_tb):
-        data = {"version_history": self.version_history, "lang_shorthand": self.lang_shorthand}
+        data = OrderedDict([
+            ("version_history", self.version_history),
+            ("lang_shorthand", self.lang_shorthand)
+        ])
         with open(os.path.join(self.storage_path, "data.json"), mode="w") as data_file:
             data_file.write(json.dumps(data, indent=4))
 
     # Returns the status of the current dev-related settings:
     def dev_mode(self):
-        status = []
+        status = "Dev Settings {dev_settings}abled | Caching {caching}abled"
+
         if self.dev_settings_enabled:
-            status.append("dev settings enabled")
+            dev_settings = "en"
         else:
-            status.append("dev settings disabled")
-        status.append(" | ")
+            dev_settings = "dis"
+
         if self.caching_enabled:
-            status.append("caching enabled")
+            caching = "en"
         else:
-            status.append("caching disabled")
-        return "".join(status)
+            caching = "dis"
+
+        return status.format(dev_settings=dev_settings, caching=caching)
 
     # Returns the last version tuple that was added
     def last_version(self):
-        patch = next(reversed(self.version_history))
-        revision = self.version_history[patch][-1]
-        return patch, revision
+        if self.version_history:
+            patch = next(reversed(self.version_history))
+            revision = self.version_history[patch][-1]
+            return patch, revision
+        else:
+            return None
 
     # Adds the given version tuple to the version history
     def add_version(self, version):
         if self.dev_settings["no_patch_appending"] == 0:
             if version[0] in self.version_history:
-                self.version_history[version[0]].append(version[1])
+                self.version_history[version[0]].append(int(version[1]))
             else:
                 self.version_history[version[0]] = [version[1]]

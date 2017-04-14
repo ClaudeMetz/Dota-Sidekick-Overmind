@@ -1,8 +1,8 @@
 import os.path
-import urllib.request
-import shutil
 import re
+import shutil
 import time
+import urllib.request
 
 
 # Handles downloading and caching of html-files
@@ -39,16 +39,16 @@ class Cacher:
         url_simple = re.sub("/", "_", url) + ".html"
         if self.caching_allowed(url):
             if url_simple in self.files:
-                with open(os.path.join(self.lang_path, url_simple), mode="r") as data_file:
+                with open(os.path.join(self.lang_path, url_simple), mode="rb") as data_file:
                     html = data_file.read()
             else:
                 html = self.request_url(url)
-                with open(os.path.join(self.lang_path, url_simple), mode="w") as data_file:
-                    data_file.write(str(html))
+                with open(os.path.join(self.lang_path, url_simple), mode="wb") as data_file:
+                    data_file.write(html)
                 self.files.append(url_simple)
         else:
             html = self.request_url(url)
-        return html
+        return html.decode("utf-8", "ignore")
 
     # Checks whether caching is enabled for the given file
     def caching_allowed(self, url):
@@ -60,15 +60,15 @@ class Cacher:
            ):
             return True
 
-    # Retrieves the file specified by the url and returns it
+    # Retrieves the file specified by the url and returns it (implements rate limiting of 1 req/sec)
     def request_url(self, url):
         if self.rate_limiting == 1:
             now = time.time()
             difference = now - self.last_request
             if difference < 1:
-                time.sleep(difference)
-            self.last_request = now
-        print("request")
-        req = urllib.request.Request("https://" + self.lang + "." + url, headers={"User-Agent": "Mozilla/5.0"})
+                time.sleep(1 - difference)
+        full_url = "https://" + self.lang + "." + url
+        req = urllib.request.Request(full_url, headers={"User-Agent": "Mozilla/5.0"})
+        self.last_request = time.time()
         html = urllib.request.urlopen(req).read()
         return html

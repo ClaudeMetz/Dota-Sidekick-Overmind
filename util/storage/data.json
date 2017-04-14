@@ -1,31 +1,26 @@
 {
     "version_history": {
-        "7.00": [
-            0,
+        "7.05": [
             1,
             2
-        ],
-        "7.01": [
-            0,
-            1
         ]
     },
     "lang_shorthand": {
-        "bulgarian": "bg",
-        "czech": "cs",
-        "german": "de",
-        "english": "www",
-        "spanish": "es",
-        "french": "fr",
-        "italian": "it",
-        "georgian": "ka",
-        "korean": "ko",
-        "polish": "pl",
-        "portuguese": "pt",
-        "russian": "ru",
         "serbian": "sr",
+        "french": "fr",
+        "spanish": "es",
         "turkish": "tr",
-        "ukrainian": "uk",
-        "chinese": "zh"
+        "polish": "pl",
+        "georgian": "ka",
+        "german": "de",
+        "portuguese": "pt",
+        "korean": "ko",
+        "english": "www",
+        "bulgarian": "bg",
+        "italian": "it",
+        "russian": "ru",
+        "chinese": "zh",
+        "czech": "cs",
+        "ukrainian": "uk"
     }
 }

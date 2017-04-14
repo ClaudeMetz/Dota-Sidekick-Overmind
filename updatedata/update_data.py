@@ -1,11 +1,11 @@
-from util.overseer import Overseer
-from updatedata.organizer.initialize import initialize
+import traceback
+
+from updatedata.database.populate import populate
 from updatedata.organizer.cleanup import cleanup
 from updatedata.organizer.deploy import deploy
-from updatedata.organizer.user_input import user_input
-from updatedata.database.populate import populate
-
-import traceback
+from updatedata.organizer.initialize import initialize
+from updatedata.organizer.user_input import UserInput
+from util.overseer import Overseer
 
 
 # Updates the production database for a new patch
@@ -14,10 +14,15 @@ def update_data():
         try:
             print(overseer.dev_mode())
             old_version = overseer.last_version()
-            print("Last recorded version: Patch " + old_version[0] + " Revision " + str(old_version[1]))
+            if old_version:
+                last_version_str = "Last recorded version: Patch '{patch}' Revision {revision}"
+                print(last_version_str.format(patch=old_version[0], revision=str(old_version[1])))
+            else:
+                print("No prior version")
 
-            version = user_input(overseer)
-            print("Updating database (Patch " + version[0] + " Revision " + str(version[1]) + ") ...")
+            version = UserInput(overseer).collect()
+            new_version_str = "Updating database (Patch '{patch}' Revision {revision}) ..."
+            print(new_version_str.format(patch=version[0], revision=str(version[1])))
 
             initialize(overseer)
             print("Setup complete!")

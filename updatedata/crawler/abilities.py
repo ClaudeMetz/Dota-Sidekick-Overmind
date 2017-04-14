@@ -16,7 +16,7 @@ def crawl_abilities(ability_soup, hero):
         spot += 1
 
         header = raw_ability.header
-        dname = header.contents[0].replace("\\", "")
+        dname = str(header.contents[0])
         ability.dname = dname
         ability.name = format_name(dname)  # Kind of hack-y for now, could be replaced with actual crawling
         ability.hotkey = hotkey(header)
@@ -41,7 +41,7 @@ def crawl_abilities(ability_soup, hero):
 
 # Formats long strings correctly
 def parse_strings(string):
-    string = " ".join(string.replace("\\", "").split())
+    string = " ".join(string.split())
     return string
 
 
