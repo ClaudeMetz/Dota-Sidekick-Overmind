@@ -14,6 +14,7 @@ class Cacher:
 
         self.last_request = time.time()
         self.rate_limiting = abs(self.overseer.dev_settings["no_rate_limiting"] - 1)
+        self.rate_per_sec = self.overseer.settings["rate_per_sec"]
 
         if self.overseer.dev_settings["conserve_cache"] == 0:
             if os.path.isdir(self.cache_path):
@@ -42,12 +43,11 @@ class Cacher:
                 with open(os.path.join(self.lang_path, url_simple), mode="rb") as data_file:
                     html = data_file.read()
             else:
-                html = self.request_url(url)
+                html = self.get_file(url)
                 with open(os.path.join(self.lang_path, url_simple), mode="wb") as data_file:
                     data_file.write(html)
-                self.files.append(url_simple)
         else:
-            html = self.request_url(url)
+            html = self.get_file(url)
         return html.decode("utf-8", "ignore")
 
     # Checks whether caching is enabled for the given file
@@ -60,15 +60,34 @@ class Cacher:
            ):
             return True
 
-    # Retrieves the file specified by the url and returns it (implements rate limiting of 1 req/sec)
+    # Gets the requested file from the source specified by the settings
+    def get_file(self, url):
+        if self.overseer.dev_settings["local_cache"] == 1:
+            url_simple = re.sub("/", "_", url) + ".html"
+            path = self.overseer.settings["local_cache_path"].split("/")
+            path.append(self.lang)
+            path.append(url_simple)
+            cache_path = os.path.abspath(os.path.join(os.path.dirname(__file__), *path))
+            with open(cache_path, mode="rb") as data_file:
+                html = data_file.read()
+        elif self.overseer.dev_settings["server_cache"] == 1:
+            url_simple = re.sub("/", "_", url) + ".html"
+            cache_url = self.overseer.settings["server_cache_url"]
+            full_url = cache_url + "/" + self.lang + "/" + url_simple
+            html = self.request_url(full_url)
+        else:
+            full_url = "https://" + self.lang + "." + url
+            html = self.request_url(full_url)
+        return html
+
+    # Retrieves the file specified by the url and returns it (with rate limiting)
     def request_url(self, url):
         if self.rate_limiting == 1:
             now = time.time()
             difference = now - self.last_request
-            if difference < 1:
-                time.sleep(1 - difference)
-        full_url = "https://" + self.lang + "." + url
-        req = urllib.request.Request(full_url, headers={"User-Agent": "Mozilla/5.0"})
+            if difference < self.rate_per_sec:
+                time.sleep(self.rate_per_sec - difference)
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
         self.last_request = time.time()
         html = urllib.request.urlopen(req).read()
         return html

@@ -19,6 +19,7 @@ class Overseer:
 
         with open(os.path.join(self.storage_path, "settings.json"), mode="r") as settings_file:
             settings = json.loads(settings_file.read())
+        self.settings = settings
         self.dev_settings = settings["dev_settings"]
         self.caching = settings["caching"]
         self.languages = settings["languages"]

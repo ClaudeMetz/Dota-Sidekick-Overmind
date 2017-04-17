@@ -2,10 +2,12 @@
   "dev_settings": {
     "conserve_tmp": 0,
     "conserve_cache": 1,
-    "skip_intro_questions": 0,
-    "no_patch_appending": 0,
+    "skip_intro_questions": 1,
+    "no_patch_appending": 1,
     "no_deployment": 0,
-    "no_rate_limiting": 0
+    "no_rate_limiting": 1,
+    "local_cache": 0,
+    "server_cache": 1
   },
   "caching": {
     "overviews": 1,
@@ -14,7 +16,9 @@
     "abilities": 1
   },
   "languages": {
-    "english": 1,
-    "german": 0
-  }
+    "english": 1
+  },
+  "rate_per_sec": 1,
+  "local_cache_path": "../localcache",
+  "server_cache_url": "https://admin.dotasidekick.com/dev/.cache"
 }
