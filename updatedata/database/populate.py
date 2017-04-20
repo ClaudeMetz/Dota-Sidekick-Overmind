@@ -8,6 +8,7 @@ from ..etc.cacher import Cacher
 
 # Populates the databases for all languages
 def populate(overseer, patch, revision):
+    verbose = overseer.dev_settings["verbose_console"]
     eng_cacher = Cacher(overseer, "english")
     item_list = list_items(eng_cacher)
     hero_list = list_heroes(eng_cacher)
@@ -20,18 +21,24 @@ def populate(overseer, patch, revision):
             cacher = Cacher(overseer, language)
 
         with session_scope(language) as session:
-            item_generator = ItemCrawler(cacher, patch, revision).crawl(item_list)
-            for item in item_generator:
-                if detect_change(session, item):
-                    session.add(item)
-            print("Items complete!")
+            if overseer.dev_settings["no_item_populating"] != 1:
+                item_generator = ItemCrawler(cacher, patch, revision).crawl(item_list)
+                for item in item_generator:
+                    if verbose == 1:
+                        print(item.dname)
+                    if detect_change(session, item):
+                        session.add(item)
+                print("Items complete!")
 
-            hero_generator = HeroCrawler(cacher, patch, revision).crawl(hero_list)
-            for hero in hero_generator:
-                if detect_change(session, hero):
-                    session.add(hero)
-                appendages = hero.abilities + hero.talents
-                for appendage in appendages:
-                    if detect_change(session, appendage):
-                        session.add(appendage)
-            print("Heroes complete!")
+            if overseer.dev_settings["no_hero_populating"] != 1:
+                hero_generator = HeroCrawler(cacher, patch, revision).crawl(hero_list)
+                for hero in hero_generator:
+                    if verbose == 1:
+                        print(hero.dname)
+                    if detect_change(session, hero):
+                        session.add(hero)
+                    appendages = hero.abilities + hero.talents
+                    for appendage in appendages:
+                        if detect_change(session, appendage):
+                            session.add(appendage)
+                print("Heroes complete!")

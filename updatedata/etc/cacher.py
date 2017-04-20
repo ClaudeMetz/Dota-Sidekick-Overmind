@@ -51,14 +51,14 @@ class Cacher:
             custom_path = self.overseer.custom_cache_path.split("/") + [self.lang, simple_url]
             path = os.path.join(base_path, *custom_path)
             html = read(path)
-        elif self.overseer.dev_settings["server_cache"] == 1:
-            server_path = self.overseer.server_cache_url.split("/") + [self.lang, simple_url]
-            server_url = "/".join(server_path)
-            html = self.request_url(server_url)
         elif simple_url in self.files:
             path = os.path.join(self.lang_path, simple_url)
             html = read(path)
             cache_to_disk = False
+        elif self.overseer.dev_settings["server_cache"] == 1:
+            server_path = self.overseer.server_cache_url.split("/") + [self.lang, simple_url]
+            server_url = "/".join(server_path)
+            html = self.request_url(server_url)
         else:
             html = self.request_url(url)
 
@@ -72,6 +72,8 @@ class Cacher:
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
         self.last_request = time.time()
         html = urllib.request.urlopen(req).read()
+        if self.overseer.dev_settings["verbose_console"] == 1:
+            print("Request: " + url)
         return html
 
     # Implements basic rate limiting
