@@ -1,12 +1,14 @@
 import os
 import shutil
 
+from .overseer import asset_path, base_path
+
+
 # Manages the asset folder
 
 
 # Checks and corrects the basic folder structure within the asset folder
-def check_folder_structure():
-    base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+def prepare_folder_structure():
     folders = ([
         ["asset"],
         ["asset", "live"],
@@ -23,7 +25,6 @@ def check_folder_structure():
 
 # Finds the database specified by the language parameter
 def find_db(language):
-    asset_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "asset"))
     paths = [
         ["live", "db"],
         ["stashed", "db"]
@@ -43,5 +44,5 @@ def deploy_db(src, overseer):
         folder = "live"
     else:
         folder = "stashed"
-    dst = os.path.join(overseer.asset_path, folder, "db", language + ".db")
+    dst = os.path.join(asset_path, folder, "db", language + ".db")
     shutil.copyfile(src, dst)

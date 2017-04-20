@@ -3,7 +3,7 @@ from ..crawler.heroes import HeroCrawler
 from ..crawler.items import ItemCrawler
 from ..crawler.overviews import list_items, list_heroes
 from ..database.session_scope import session_scope
-from ..organizer.cacher import Cacher
+from ..etc.cacher import Cacher
 
 
 # Populates the databases for all languages

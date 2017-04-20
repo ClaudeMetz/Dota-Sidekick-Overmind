@@ -6,7 +6,7 @@
     "no_patch_appending": 1,
     "no_deployment": 0,
     "no_rate_limiting": 1,
-    "local_cache": 0,
+    "custom_cache": 0,
     "server_cache": 1
   },
   "caching": {
@@ -19,6 +19,6 @@
     "english": 1
   },
   "rate_per_sec": 1,
-  "local_cache_path": "../localcache",
+  "custom_cache_path": "updatedata/localcache",
   "server_cache_url": "https://admin.dotasidekick.com/dev/.cache"
 }

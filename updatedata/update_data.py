@@ -1,10 +1,8 @@
 import traceback
 
 from updatedata.database.populate import populate
-from updatedata.organizer.cleanup import cleanup
-from updatedata.organizer.deploy import deploy
-from updatedata.organizer.initialize import initialize
-from updatedata.organizer.user_input import UserInput
+from updatedata.etc.manage import initialize, deploy, cleanup
+from updatedata.etc.user_input import UserInput
 from util.overseer import Overseer
 
 
@@ -13,6 +11,7 @@ def update_data():
     with Overseer() as overseer:
         try:
             print(overseer.dev_mode())
+
             old_version = overseer.last_version()
             if old_version:
                 last_version_str = "Last recorded version: Patch '{patch}' Revision {revision}"
@@ -36,7 +35,7 @@ def update_data():
             overseer.add_version(version)
             cleanup(overseer)
             print("Database successfully updated!")
-        except Exception:
+        except:
             print(traceback.print_exc())
             cleanup(overseer)
 

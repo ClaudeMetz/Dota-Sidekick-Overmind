@@ -3,38 +3,32 @@ import os.path
 from collections import OrderedDict
 
 
+this_path = os.path.abspath(os.path.dirname(__file__))
+base_path = os.path.join(this_path, "..")
+asset_path = os.path.join(this_path, "..", "asset")
+tmp_path = os.path.join(this_path, "..", "updatedata", ".tmp")
+cache_path = os.path.join(this_path, "..", "updatedata", ".cache")
+
+storage_path = os.path.join(this_path, "storage")
+
+
 # Handles settings and general data for all parts of the project
 class Overseer:
     # Loads all settings and data and saves it as instance variables
     def __init__(self):
-        this_path = os.path.abspath(os.path.dirname(__file__))
-        self.asset_path = os.path.join(this_path, "..", "asset")
-        self.tmp_path = os.path.join(this_path, "..", "updatedata", ".tmp")
-        self.storage_path = os.path.join(this_path, "storage")
+        attributes = {}
+        data_dict = read_json("data.json")
+        attributes.update(data_dict)
+        self.data_items = list(data_dict)  # For reconstruction later
 
-        with open(os.path.join(self.storage_path, "data.json"), mode="r") as data_file:
-            data = json.loads(data_file.read(), object_pairs_hook=OrderedDict)
-        self.version_history = data["version_history"]
-        self.lang_shorthand = data["lang_shorthand"]
+        settings_dict = read_json("settings.json")
+        attributes.update(settings_dict)
 
-        with open(os.path.join(self.storage_path, "settings.json"), mode="r") as settings_file:
-            settings = json.loads(settings_file.read())
-        self.settings = settings
-        self.dev_settings = settings["dev_settings"]
-        self.caching = settings["caching"]
-        self.languages = settings["languages"]
+        self.__dict__.update(attributes)
+        # The preceding lines automatically set all settings and data variables as class attributes for easy access
 
-        self.dev_settings_enabled = False
-        for setting in self.dev_settings.values():
-            if setting == 1:
-                self.dev_settings_enabled = True
-                break
-
-        self.caching_enabled = False
-        for setting in self.caching.values():
-            if setting == 1:
-                self.caching_enabled = True
-                break
+        self.dev_settings_enabled = enabled(self.dev_settings.values())
+        self.caching_enabled = enabled(self.caching.values())
 
     # For convenient use of 'with'
     def __enter__(self):
@@ -42,11 +36,12 @@ class Overseer:
 
     # Writes all data to disk as it could have changed during runtime
     def __exit__(self, exc_type, exc_val, exc_tb):
-        data = OrderedDict([
-            ("version_history", self.version_history),
-            ("lang_shorthand", self.lang_shorthand)
-        ])
-        with open(os.path.join(self.storage_path, "data.json"), mode="w") as data_file:
+        data = {}
+        for dataset in self.data_items:
+            data.update({dataset: getattr(self, dataset)})
+            # Reconstructs the data dictionary
+
+        with open(os.path.join(storage_path, "data.json"), mode="w") as data_file:
             data_file.write(json.dumps(data, indent=4))
 
     # Returns the status of the current dev-related settings:
@@ -81,3 +76,20 @@ class Overseer:
                 self.version_history[version[0]].append(int(version[1]))
             else:
                 self.version_history[version[0]] = [version[1]]
+
+
+# Reads and returns the json specified by the given filename
+def read_json(file):
+    with open(os.path.join(storage_path, file), mode="r") as data_file:
+        r = dict(json.loads(data_file.read(), object_pairs_hook=OrderedDict))
+    return r
+
+
+# Returns True when one of the items in the list are true
+def enabled(values):
+    en = False
+    for setting in values:
+        if setting == 1:
+            en = True
+            break
+    return en

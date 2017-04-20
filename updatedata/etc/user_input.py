@@ -5,7 +5,7 @@ class UserInput:
     def __init__(self, overseer):
         self.overseer = overseer
         self.patch = "dev"
-        self.revision = 0
+        self.revision = 1
         self.verify_func = {
             "Patch": self.verify_patch,
             "Revision": self.verify_revision
@@ -38,7 +38,7 @@ class UserInput:
 
     # Sanity-check for the entered patch
     def verify_patch(self, answer):
-        if re.match("^7\.[0-9]{2}[a-z]?$", answer) and answer >= self.last_version[0]:
+        if re.fullmatch("7\.[0-9]{2}[a-z]?", answer) and answer >= self.last_version[0]:
             return True
         else:
             return False
@@ -46,7 +46,7 @@ class UserInput:
     # Sanity-check for the entered revision
     def verify_revision(self, answer):
         if self.patch == self.last_version[0]:
-            if re.match("^[0-9]+$", answer) and int(answer) > self.last_version[1]:
+            if re.fullmatch("[0-9]+", answer) and int(answer) > self.last_version[1]:
                 return True
         else:
             if answer == "1":
