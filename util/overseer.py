@@ -17,11 +17,17 @@ class Overseer:
     # Loads all settings and data and saves it as instance variables
     def __init__(self):
         attributes = {}
+
         data_dict = read_json("data.json")
         attributes.update(data_dict)
         self.data_items = list(data_dict)  # For reconstruction later
 
         settings_dict = read_json("settings.json")
+        if settings_dict["live"] == 1:
+            del settings_dict["dev_settings"]
+            settings_dict["dev_settings"] = settings_dict.pop("live_settings")
+        else:
+            del settings_dict["live_settings"]
         attributes.update(settings_dict)
 
         self.__dict__.update(attributes)

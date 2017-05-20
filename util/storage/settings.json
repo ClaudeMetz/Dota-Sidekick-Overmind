@@ -1,4 +1,17 @@
 {
+  "live_settings": {
+    "verbose_console": 0,
+    "conserve_tmp": 0,
+    "conserve_cache": 0,
+    "skip_intro_questions": 0,
+    "no_item_populating": 0,
+    "no_hero_populating": 0,
+    "no_patch_appending": 0,
+    "no_deployment": 0,
+    "no_rate_limiting": 0,
+    "custom_cache": 0,
+    "server_cache": 0
+  },
   "dev_settings": {
     "verbose_console": 0,
     "conserve_tmp": 0,
@@ -23,5 +36,6 @@
   },
   "rate_per_sec": 1,
   "custom_cache_path": "updatedata/customcache",
-  "server_cache_url": "https://admin.dotasidekick.com/dev/.cache"
+  "server_cache_url": "https://admin.dotasidekick.com/dev/.cache",
+  "live": 0
 }

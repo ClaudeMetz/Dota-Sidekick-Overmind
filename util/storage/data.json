@@ -1,4 +1,12 @@
 {
+    "version_history": {
+        "7.05": [
+            1
+        ],
+        "7.06": [
+            1
+        ]
+    },
     "lang_shorthand": {
         "serbian": "sr",
         "french": "fr",
@@ -16,13 +24,5 @@
         "chinese": "zh",
         "czech": "cs",
         "ukrainian": "uk"
-    },
-    "version_history": {
-        "7.05": [
-            1
-        ],
-        "7.06": [
-            1
-        ]
     }
 }
