@@ -26,6 +26,7 @@ def populate(overseer, patch, revision):
                 for item in item_generator:
                     if verbose == 1:
                         print(item.dname)
+
                     if detect_change(session, item):
                         session.add(item)
                 print("Items complete!")
@@ -35,10 +36,23 @@ def populate(overseer, patch, revision):
                 for hero in hero_generator:
                     if verbose == 1:
                         print(hero.dname)
-                    if detect_change(session, hero):
-                        session.add(hero)
+
+                    # The following is a bit convoluted, but serves the purpose of working around some SQLAlchemy
+                    #  'limitations' in how inserting works, specifically how when you insert 'hero', it inserts all
+                    #  appendages, and doesn't insert them if 'hero' itself hasn't changed
                     appendages = hero.abilities + hero.talents
                     for appendage in appendages:
-                        if detect_change(session, appendage):
+                        if not detect_change(session, appendage):
+                            appendage_class = type(appendage).__name__
+                            if appendage_class == "Ability":
+                                hero.abilities.remove(appendage)
+                            elif appendage_class == "Talent":
+                                hero.talents.remove(appendage)
+
+                    if detect_change(session, hero):
+                        session.add(hero)
+                    elif hero.abilities or hero.talents:
+                        appendages = hero.abilities + hero.talents
+                        for appendage in appendages:
                             session.add(appendage)
                 print("Heroes complete!")

@@ -29,7 +29,7 @@ class UserInput:
         answer = ""
         while (confirmed != "y") or not correct:
             answer = input("Enter the {} for the new version: ".format(choice))
-            confirmed = input("Is '{}' correct? (y/n): ".format(choice))
+            confirmed = input("Is '{}' correct? (y/n): ".format(answer))
             if confirmed == "y":
                 correct = self.verify_func[choice](answer)
                 if not correct:
